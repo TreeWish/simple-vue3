@@ -20,4 +20,20 @@ describe('effect', () => {
     expect(nextAge).toBe(20)
 
   })
+
+  it('return runner while effec call', () => {
+    // effect(fn) => function runner => fn => return res
+    // effec的runner可以获取到fn的返回值
+    let foo = 1
+    const runner = effect(() => {
+      foo++
+      return 'foo'
+    })
+
+    expect(foo).toBe(2)
+    const r = runner()
+    expect(foo).toBe(3)
+    expect(r).toBe('foo')
+
+  })
 }) 

@@ -7,7 +7,7 @@ class ReactivityEffect {
   run() {
     // 在初始化调用fn的时候获取到当前effect实例
     activeEffect = this
-    this._fn()
+    return this._fn()
   }
 }
 
@@ -47,4 +47,7 @@ export function effect(fn) {
   const _effect = new ReactivityEffect(fn)
   //  调用effect 触发run函数
   _effect.run()
+
+  // effect 存在 this操作，保证调用runner函数this指向不变
+  return _effect.run.bind(_effect)
 }
