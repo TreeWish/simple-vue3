@@ -1,9 +1,9 @@
-import { reactivity } from "../reactivity"
+import { reactive } from "../reactive"
 
-describe('reactivity', () => {
+describe('reactive', () => {
   it('happy path', () => {
     let original = { foo: 1 }
-    let observed = reactivity(original)
+    let observed = reactive(original)
 
     expect(observed).not.toBe(original)
     expect(observed.foo).toBe(1)
