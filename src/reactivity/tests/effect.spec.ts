@@ -76,9 +76,11 @@ describe("effect", () => {
     expect(dummy).toBe(2)
     // 停止effect更新知道 调用runner
     stop(runner)
-    obj.foo = 3
+    obj.foo++
+
     expect(dummy).toBe(2)
     runner()
+    obj.foo = 3
     expect(dummy).toBe(3)
     
   })
