@@ -1,5 +1,10 @@
+import { isObject } from '../shared/index';
 import { track, trigger } from "./effect"
-import { ReactiveFlags } from "./reactive"
+import { reactive, ReactiveFlags, readonly } from "./reactive"
+
+const get = createGetter()
+const set = createSetter()
+const readonlyGet = createGetter(true)
 
 function createGetter(isReadonly = false) {
   return function get(target, key) {
@@ -11,6 +16,9 @@ function createGetter(isReadonly = false) {
     }
 
     const res = Reflect.get(target, key)
+    if (isObject(res)) {
+      return isReadonly ? readonly(res) : reactive(res)
+    }
 
     // TODO 依赖收集
     if (!isReadonly) {
@@ -31,12 +39,12 @@ function createSetter() {
 }
 
 export const mutableHandlers = {
-  get: createGetter(),
-  set: createSetter(),
+  get,
+  set,
 }
 
 export const readonlyHandlers = {
-  get: createGetter(true),
+  get: readonlyGet,
   set(target, key, value) {
     console.warn(
       `key :"${String(key)}" set failed, beacuse target is readonly type`,
