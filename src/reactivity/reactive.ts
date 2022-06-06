@@ -28,6 +28,9 @@ export function isReadonly(row) {
 export function isReactive(row) {
   return !!row[ReactiveFlags.IS_REACTIVE]
 }
- 
+
+export function isProxy(row) {
+  return isReadonly(row) || isReactive(row)
+}
 
 
