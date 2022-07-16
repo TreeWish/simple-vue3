@@ -71,7 +71,11 @@ export function track(target, key) {
     dep = new Set()
     depsMap.set(key, dep)
   }
+  trackEffect(dep)
+}
 
+// 重构activeEffect处理逻辑，并且用于ref
+export function trackEffect(dep) {
   // 优化处理： 当dep中添加过 当前activeEffect， 若存在不做处理
   if (dep.has(activeEffect)) return
   // 存放当前effect实例
@@ -84,6 +88,12 @@ export function track(target, key) {
 export function trigger(target, key) {
   const depsMap = targetMap.get(target)
   const dep = depsMap.get(key)
+  // 触发当前key下面的所有依赖
+  triggerEffect(dep)
+}
+
+// 重构trigger fn处理逻辑，并且用于ref
+export function triggerEffect(dep) {
   // 触发当前key下面的所有依赖
   for (const effect of dep) {
     // 传入scheduler情况处理
@@ -109,7 +119,7 @@ export function stop(runner) {
   activeEffect.stop(runner)
 }
 
-function isTracking() {
-   // 不调用run 时，activeEffect 为 undifinded
-   return shouldTrack && activeEffect !== undefined
+export function isTracking() {
+  // 不调用run 时，activeEffect 为 undifinded
+  return shouldTrack && activeEffect !== undefined
 }
