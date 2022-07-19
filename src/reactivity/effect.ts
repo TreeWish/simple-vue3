@@ -2,7 +2,7 @@ import { extend } from "../shared/index"
 
 let activeEffect
 let shouldTrack = true
-class ReactivityEffect {
+export class ReactivityEffect {
   private _fn: any
   public scheduler
   deps = []
